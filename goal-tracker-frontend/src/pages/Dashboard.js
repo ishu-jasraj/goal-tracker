@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import '../styles/Dashboard.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import CreateModal from './CreateModal';
+import Delete from '../components/Delete';
+import { toast } from 'react-toastify';
+import Notification from '../components/Notification';
 
 const initialFormData = {
     _id: '',
@@ -12,21 +15,65 @@ const initialFormData = {
     maxTime: '',
 };
 
-// function formatTime(time) {
-//     return new Date(time.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
+// const fetchAllGoals = async (token) => {
+//     const response = await fetch('http://localhost:5000/api/goals/me', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Access-Control-Allow-Origin': true
+//         },
+//         body: JSON.stringify(token),
+//     });
+//     console.log("response data after fetching goals for user->", await response.json())
+//     const fetchedGoals = await response.json();
 // }
+
+function formatTime(time) {
+    return new Date(time.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
+}
 
 const Dashboard = () => {
     const [goals, setGoals] = useState([]);
     const [formData, setFormData] = useState(initialFormData);
     const [isModify, setModify] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDelete, setIsDelete] = useState(-1);
 
     const navigate = useNavigate();
-
     const location = useLocation();
-    const { username, _id } = location.state || {};
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { username, token } = location.state || {};
+
+    useEffect(() => {
+        const fetchGoals = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/goals/me', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Assuming you're using Bearer token for authorization
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch goals');
+                }
+
+                const fetchedGoals = await response.json();
+                console.log("fetchedGoals--->>>>>", fetchedGoals)
+                if (fetchedGoals && fetchedGoals.length > 0) {
+                    setGoals(fetchedGoals);
+                }
+            } catch (error) {
+                console.error('Error fetching goals:', error);
+            }
+        };
+
+        fetchGoals();
+    }, [token]);
+
+
 
     function handleLogout() {
         navigate('/login');
@@ -52,9 +99,41 @@ const Dashboard = () => {
     };
 
     const handleDelete = (index) => {
-        setGoals((prevGoals) => prevGoals.filter((_, i) => i !== index));
-    };
+        setIsDelete(index);
+        console.log("is delete index---", isDelete)
 
+    };
+    const onDeleteGoal = async () => {
+        console.log('!!!!---->>>', goals)
+        console.log('!!!! is del---->>>', isDelete)
+        console.log('!!!! is del---->>>', goals[isDelete])
+        console.log(JSON.stringify(goals[setIsDelete]))
+        try {
+            console.log("deleteing-----")
+
+            const response = await fetch('http://localhost:5000/api/goals/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Assuming you're using Bearer token for authorization
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(goals[isDelete]),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete goal');
+            }
+
+            setGoals((prevGoals) => prevGoals.filter((_, i) => i !== isDelete));
+            setIsDelete(-1);
+            toast.success('Goal Deleted Successfully')
+        }
+        catch (e) {
+            setIsDelete(-1);
+            toast.error('Delete failed')
+        }
+    }
     const handleAddInput = () => {
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -63,16 +142,63 @@ const Dashboard = () => {
     };
 
     const handleInputChange = (id, event) => {
+        const { name, value } = event.target;
         const newTasks = formData.tasks.map(task =>
             task.id === id ? { ...task, value: event.target.value } : task
         );
         setFormData({ ...formData, tasks: newTasks });
     };
 
+    // const handleInputChange = (id, event) => {
+    //     const { name, value } = event.target;
+    //     const newTasks = formData.tasks.map(task =>
+    //         task.id === id ? { ...task, [name]: value } : task
+    //     );
+    //     console.log("new task ===", newTasks);
+    //     setFormData({ ...formData, tasks: newTasks });
+    // };
+
+
+    // const handleFieldChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({ ...formData, [name]: value });
+    // };
+    const handleTaskInputChange = (id, event) => {
+        console.log("event.target---", event.target)
+        // console.log("event.target.value---", event.target.value)
+        const { name, value, type, checked } = event.target;
+        console.log("name----", name)
+        console.log("value----", value)
+        console.log("type----", type)
+        console.log("checked----", checked)
+        const newTasks = formData.tasks.map(task => {
+            if (task.id === id) {
+                const obj = {
+                    ...task,
+                    [name]: value,
+                }
+                console.log("check it ====", task.time);
+                if (!task.time) {
+                    obj.checked = name === 'time' ? true : false;
+                }
+                console.log("obj----", obj)
+                return obj;
+            }
+            return task;
+        });
+        setFormData({
+            ...formData,
+            tasks: newTasks
+        });
+    };
+
+
     const handleFieldChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const closeDeleteModal = () => { }
 
 
 
@@ -131,6 +257,10 @@ const Dashboard = () => {
                     </div>
                 ))}
             </div>
+            <Notification goals={goals} />
+            {
+                isDelete >= 0 && <Delete onDeleteGoal={onDeleteGoal} closeDeleteModal={closeDeleteModal} />
+            }
             {
                 isModalOpen &&
                 <CreateModal
@@ -140,7 +270,9 @@ const Dashboard = () => {
                     closeModal={closeModal}
                     handleInputChange={handleInputChange}
                     handleFieldChange={handleFieldChange}
+                    handleTaskInputChange={handleTaskInputChange}
                     handleAddInput={handleAddInput}
+                    token={token}
                     title='Create Goal' />
             }
         </div>

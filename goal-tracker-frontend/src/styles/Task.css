@@ -1,0 +1,238 @@
+/* .task-container {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.task-input {
+    margin-bottom: 15px;
+}
+
+.task-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-details {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.task-select,
+.task-frequency {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.task-select label,
+.task-frequency label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-select select,
+.task-frequency select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-reminder {
+    display: flex;
+    align-items: center;
+    flex: 2;
+}
+
+.task-reminder input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.time-label {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.task-reminder input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+} */
+
+/* v2 */
+/* .task-container {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.task-input {
+    margin-bottom: 15px;
+}
+
+.task-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.task-select,
+.task-frequency {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.task-select label,
+.task-frequency label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-select select,
+.task-frequency select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-reminder-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.task-reminder {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.task-reminder input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.time-label {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.task-reminder input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+} */
+
+
+.task-container {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.task-input {
+    margin-bottom: 15px;
+}
+
+.task-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.task-select,
+.task-frequency {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.task-select label,
+.task-frequency label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.task-select select,
+.task-frequency select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-reminder-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.task-reminder {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.task-reminder input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.time-label {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.task-reminder input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 10px;
+}

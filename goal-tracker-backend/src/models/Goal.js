@@ -1,5 +1,6 @@
 const { ObjectId, Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
+const taskSchema = require('./Task');
 
 const goalSchema = mongoose.Schema({
     title: {
@@ -7,7 +8,7 @@ const goalSchema = mongoose.Schema({
         required: true
     },
     tasks: {
-        type: Array
+        type: [taskSchema]
     },
     minTime: {
         type: Date,
@@ -19,7 +20,7 @@ const goalSchema = mongoose.Schema({
     },
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        // required: true,
+        required: true,
         ref: 'User'
     }
 }, {
