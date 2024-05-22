@@ -2,7 +2,7 @@ const { ObjectId, Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
 
 const goalSchema = mongoose.Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
@@ -10,14 +10,16 @@ const goalSchema = mongoose.Schema({
         type: Array
     },
     minTime: {
-        type: Date
+        type: Date,
+        required: true
     },
     maxTime: {
-        type: Date
+        type: Date,
+        required: true
     },
-    userId: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        // required: true,
         ref: 'User'
     }
 }, {

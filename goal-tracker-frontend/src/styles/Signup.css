@@ -60,3 +60,7 @@ input {
 .close-btn {
     margin-top: 10px !important;
 }
+
+.invalid-login {
+    color: red;
+}

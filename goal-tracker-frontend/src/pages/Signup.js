@@ -43,7 +43,6 @@ const Signup = () => {
             });
 
             if (response.status === 400) {
-                alert("Email already in use")
                 throw new Error('Email already in use');
             }
             else if (response.status === 401) {
@@ -98,6 +97,7 @@ const Signup = () => {
                         required
                     />
                 </div>
+                {error.length > 0 && <p className='invalid-login'>*Email already in use, sign up with different email ID</p>}
                 <button className='submit-btn' type="submit">Sign Up</button>
             </form>
             <button className='submit-btn signup-btn' type="button" onClick={handleLogin}>Login</button>

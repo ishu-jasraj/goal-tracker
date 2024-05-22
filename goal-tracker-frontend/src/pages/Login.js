@@ -42,7 +42,6 @@ const Login = () => {
             console.log("response->", response)
             // console.log("response data->", await response.json())
             if (response.status === 400) {
-                alert("Please login with correct credentials")
                 throw new Error('Please login with correct credentials');
             }
             else if (response.status === 401) {
@@ -84,6 +83,7 @@ const Login = () => {
                         required
                     />
                 </div>
+                {error.length > 0 && <p className='invalid-login'>*Please login with correct credentials</p>}
                 <button className='submit-btn' type="submit">Login</button>
             </form>
             <button className='submit-btn signup-btn' type="button" onClick={handleSignup}>Signup</button>

@@ -1,56 +1,66 @@
-// import React from 'react';
-
-// const CreateModal = ({ closeModal, title }) => {
-//     const handleSubmit = async (e) => {
-//         console.log("clicked....")
-//         e.preventDefault();
-//     }
-//     return (
-//         <div className="modal-overlay">
-//             <div className="modal-content">
-//                 <h2>{title}</h2>
-//                 <form onSubmit={handleSubmit}>
-//                     <div className="form-group">
-//                         <label htmlFor="title">Title:</label>
-//                         <input
-//                             type="text"
-//                             id="title"
-//                             name="title"
-//                             // value={formData.email}
-//                             // onChange={handleChange}
-//                             required
-//                         />
-//                     </div>
-//                     <button className='submit-btn' type="submit">Save</button>
-//                 </form>
-//                 <button className='submit-btn close-btn' onClick={closeModal}>Close</button>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default CreateModal;
-
 import React, { useState } from 'react';
+import '../styles/CreateModal.css';
 
-const CreateModal = ({ closeModal, title }) => {
-    const [inputs, setInputs] = useState([{ id: 1, name: 'title', value: '' }]);
-    const [formData, setFormData] = useState({});
+const CreateModal = ({ closeModal, title, createGoal }) => {
+    const [formData, setFormData] = useState({
+        title: '',
+        tasks: [{ id: 1, name: `Task-1`, value: '' }],
+        minTime: '',
+        maxTime: '',
+    });
 
     const handleAddInput = () => {
-        setInputs([...inputs, { id: inputs.length + 1, name: `Task-${inputs.length}`, value: '' }]);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            tasks: [...prevFormData.tasks, { id: prevFormData.tasks.length + 1, name: `Task-${prevFormData.tasks.length + 1}`, value: '' }],
+        }));
     };
 
     const handleInputChange = (id, event) => {
-        const newInputs = inputs.map(input =>
-            input.id === id ? { ...input, value: event.target.value } : input
+        const newTasks = formData.tasks.map(task =>
+            task.id === id ? { ...task, value: event.target.value } : task
         );
-        setInputs(newInputs);
+        setFormData({ ...formData, tasks: newTasks });
+    };
+
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(e.);
+        console.log(formData);
+        //filtering out the empty tasks
+        const filteredTasks = formData.tasks.filter(task => task.value.trim() !== '');
+        const finalFormData = {
+            ...formData,
+            tasks: filteredTasks
+        };
+        console.log(finalFormData);
+        // Handle form submission, e.g., send data to server
+        try {
+            const response = await fetch('http://localhost:5000/api/goals/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': true
+                },
+                body: JSON.stringify(finalFormData),
+            });
+            console.log("response->", response)
+            // console.log("response data->", await response.json())
+            if (response.status === 400) {
+                throw new Error('Unable to create the goal');
+            }
+            const goalData = await response.json();
+            console.log("goalData--", goalData)
+            closeModal();
+            createGoal(goalData);
+
+        } catch (error) {
+            console.log("error-->>>.", error.message)
+        }
     };
 
     return (
@@ -58,39 +68,58 @@ const CreateModal = ({ closeModal, title }) => {
             <div className="modal-content">
                 <h2>{title}</h2>
                 <form onSubmit={handleSubmit}>
-                    {inputs.map(input => (
-                        <div className="form-group" key={input.id}>
-                            <label htmlFor={input.name}>{input.name.charAt(0).toUpperCase() + input.name.slice(1)}:</label>
+                    <div className="form-group">
+                        <label htmlFor="title">Title:</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleFieldChange}
+                            required
+                        />
+                    </div>
+                    {formData.tasks.map(task => (
+                        <div className="form-group" key={task.id}>
+                            <label htmlFor={task.name}>{task.name.charAt(0).toUpperCase() + task.name.slice(1)}:</label>
                             <input
                                 type="text"
-                                id={input.name}
-                                name={input.name}
-                                value={input.value}
-                                onChange={(e) => handleInputChange(input.id, e)}
-                                required
+                                id={task.name}
+                                name={task.name}
+                                value={task.value}
+                                onChange={(e) => handleInputChange(task.id, e)}
                             />
                         </div>
                     ))}
-                    <button type="button" className="add-btn" onClick={handleAddInput}>Add Task+</button>
+                    <button
+                        type="button"
+                        className="add-btn"
+                        onClick={handleAddInput}
+                        disabled={formData.tasks.length === 5}
+                    >Add Task+</button>
                     <div className="form-group">
-                        <label htmlFor="min-time">Minimum Time:</label>
+                        <label htmlFor="minTime">Minimum Time:</label>
                         <input
-                            type="text"
-                            id="min-time"
-                            name="min-time"
+                            type="date"
+                            id="minTime"
+                            name="minTime"
+                            value={formData.minTime}
+                            onChange={handleFieldChange}
                             required
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="max-time">Maximum Time:</label>
+                        <label htmlFor="maxTime">Maximum Time:</label>
                         <input
-                            type="text"
-                            id="max-time"
-                            name="max-time"
+                            type="date"
+                            id="maxTime"
+                            name="maxTime"
+                            value={formData.maxTime}
+                            onChange={handleFieldChange}
                             required
                         />
                     </div>
-                    <button className="submit-btn" type="submit" onClick={handleSubmit}>Save</button>
+                    <button className="submit-btn" type="submit">Save</button>
                 </form>
                 <button className="submit-btn close-btn" onClick={closeModal}>Close</button>
             </div>
