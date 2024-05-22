@@ -15,4 +15,15 @@ router.post('/create', async (req, res) => {
     }
 })
 
+//update goal
+router.patch('/update', async (req, res) => {
+    try {
+        console.log("update body-->", req.body)
+        const goal = await Goal.findByIdAndUpdate({ _id: req.body._id }, req.body, { new: true });
+        res.send(goal);
+    } catch (e) {
+        res.status(400).send("error while updating goal!!")
+    }
+})
+
 module.exports = router;

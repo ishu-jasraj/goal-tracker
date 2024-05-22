@@ -1,32 +1,16 @@
 import React, { useState } from 'react';
 import '../styles/CreateModal.css';
+import { toast } from 'react-toastify';
 
-const CreateModal = ({ closeModal, title, createGoal }) => {
-    const [formData, setFormData] = useState({
-        title: '',
-        tasks: [{ id: 1, name: `Task-1`, value: '' }],
-        minTime: '',
-        maxTime: '',
-    });
-
-    const handleAddInput = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            tasks: [...prevFormData.tasks, { id: prevFormData.tasks.length + 1, name: `Task-${prevFormData.tasks.length + 1}`, value: '' }],
-        }));
-    };
-
-    const handleInputChange = (id, event) => {
-        const newTasks = formData.tasks.map(task =>
-            task.id === id ? { ...task, value: event.target.value } : task
-        );
-        setFormData({ ...formData, tasks: newTasks });
-    };
-
-    const handleFieldChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, handleFieldChange, handleInputChange, isModify }) => {
+    // console.log("modalData---->>>>", modalData)
+    // const [formData, setFormData] = useState({
+    //     title: modalData.title ?? '',
+    //     tasks: modalData.tasks ?? [{ id: 1, name: `Task-1`, value: '' }],
+    //     minTime: modalData.minTime ?? '',
+    //     maxTime: modalData.maxTime ?? '',
+    // });
+    console.log("formData--->>>>", formData)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,23 +24,48 @@ const CreateModal = ({ closeModal, title, createGoal }) => {
         console.log(finalFormData);
         // Handle form submission, e.g., send data to server
         try {
-            const response = await fetch('http://localhost:5000/api/goals/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': true
-                },
-                body: JSON.stringify(finalFormData),
-            });
-            console.log("response->", response)
-            // console.log("response data->", await response.json())
-            if (response.status === 400) {
-                throw new Error('Unable to create the goal');
+            let goalData = {};
+            let response;
+            if (isModify) {
+                console.log("modifyyyyyyy-->>>>", finalFormData)
+                response = await fetch('http://localhost:5000/api/goals/update', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': true
+                    },
+                    body: JSON.stringify(finalFormData),
+                });
+                // console.log("response data->", await response.json())
+                if (response && response.status === 400) {
+                    toast.error('Failed to update the goal');
+                    throw new Error('Unable to update the goal');
+                }
+                toast.success('Goal Modified Successfully');
             }
-            const goalData = await response.json();
-            console.log("goalData--", goalData)
-            closeModal();
+            else {
+                delete finalFormData._id;
+                response = await fetch('http://localhost:5000/api/goals/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': true
+                    },
+                    body: JSON.stringify(finalFormData),
+                });
+                // console.log("response data->", await response.json())
+                if (response && response.status === 400) {
+                    toast.error('Failed to create the goal');
+                    throw new Error('Unable to create the goal');
+                }
+                toast.success('Goal Created Successfully');
+            }
+            goalData = await response.json();
+            goalData.minTime = goalData.minTime.split('T')[0];
+            goalData.maxTime = goalData.maxTime.split('T')[0];
+            console.log("modified goal data--->>>>", goalData)
             createGoal(goalData);
+            closeModal();
 
         } catch (error) {
             console.log("error-->>>.", error.message)
@@ -79,7 +88,7 @@ const CreateModal = ({ closeModal, title, createGoal }) => {
                             required
                         />
                     </div>
-                    {formData.tasks.map(task => (
+                    {formData.tasks && formData.tasks.map(task => (
                         <div className="form-group" key={task.id}>
                             <label htmlFor={task.name}>{task.name.charAt(0).toUpperCase() + task.name.slice(1)}:</label>
                             <input
@@ -97,6 +106,7 @@ const CreateModal = ({ closeModal, title, createGoal }) => {
                         onClick={handleAddInput}
                         disabled={formData.tasks.length === 5}
                     >Add Task+</button>
+                    {formData.tasks.length === 5 && <p>button disabled</p>}
                     <div className="form-group">
                         <label htmlFor="minTime">Minimum Time:</label>
                         <input

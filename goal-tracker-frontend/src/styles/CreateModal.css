@@ -13,9 +13,3 @@
     background: #6c757d;
     cursor: not-allowed;
 }
-
-.max-tasks-warning {
-    display: block;
-    margin-top: 10px;
-    color: #dc3545;
-}

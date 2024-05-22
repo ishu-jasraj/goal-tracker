@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Signup.css';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -52,9 +53,11 @@ const Signup = () => {
             const data = await response.json();
             setSuccess('Signup successful!');
             console.log('Form submitted', data);
+            toast.success('Signed Up Successfully')
             navigate('/login')
         } catch (error) {
             console.log("-->>>.", error.message)
+            toast.error("Sign Up Failed")
             setError(error.message);
         }
     };

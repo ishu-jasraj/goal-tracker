@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Signup.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -25,7 +26,6 @@ const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        console.log("clicked....")
         e.preventDefault();
         setError('');
         setSuccess('');
@@ -39,7 +39,6 @@ const Login = () => {
                 },
                 body: JSON.stringify(formData),
             });
-            console.log("response->", response)
             // console.log("response data->", await response.json())
             if (response.status === 400) {
                 throw new Error('Please login with correct credentials');
@@ -48,10 +47,11 @@ const Login = () => {
                 throw new Error('Failed to login');
             }
             const { username, _id } = await response.json();
+            toast.success('Logged In Successfully');
             setSuccess('login successful!');
             navigate('/dashboard', { state: { username, _id } });
         } catch (error) {
-            console.log("error-->>>.", error.message)
+            toast.error('Login Failed');
             setError(error.message);
         }
     };

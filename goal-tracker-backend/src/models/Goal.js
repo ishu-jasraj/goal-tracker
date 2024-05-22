@@ -11,11 +11,11 @@ const goalSchema = mongoose.Schema({
     },
     minTime: {
         type: Date,
-        required: true
+        required: true,
     },
     maxTime: {
         type: Date,
-        required: true
+        required: true,
     },
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,6 +24,16 @@ const goalSchema = mongoose.Schema({
     }
 }, {
     timestamps: true
+});
+
+goalSchema.pre('save', function (next) {
+    if (this.isModified('minTime')) {
+        this.minTime = this.minTime.toISOString().split('T')[0];
+    }
+    if (this.isModified('maxTime')) {
+        this.maxTime = this.maxTime.toISOString().split('T')[0];
+    }
+    next();
 });
 
 const Goal = mongoose.model('Goal', goalSchema);
