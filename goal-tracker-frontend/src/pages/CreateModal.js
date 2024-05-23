@@ -29,7 +29,7 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
         if (finalFormData.maxTime < finalFormData.minTime) {
             return toast.error('Maxtime should be greater than Mintime');
         }
-        // Handle form submission, e.g., send data to server
+
         try {
             let goalData = {};
             let response;
@@ -41,12 +41,11 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Assuming you're using Bearer token for authorization
+                        'Authorization': `Bearer ${token}`,
                         'Access-Control-Allow-Origin': true
                     },
                     body: JSON.stringify(finalFormData),
                 });
-                // console.log("response data->", await response.json())
                 if (response && response.status === 400) {
                     toast.error('Failed to update the goal');
                     throw new Error('Unable to update the goal');
@@ -61,12 +60,11 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Assuming you're using Bearer token for authorization
+                        'Authorization': `Bearer ${token}`,
                         'Access-Control-Allow-Origin': true
                     },
                     body: JSON.stringify(finalFormData),
                 });
-                // console.log("response data->", await response.json())
                 if (response && response.status === 400) {
                     toast.error('Failed to create the goal');
                     throw new Error('Unable to create the goal');
@@ -74,7 +72,6 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                 goalData = await response.json();
                 toast.success('Goal Created Successfully');
             }
-            // goalData = await response.json();
             goalData.minTime = goalData.minTime.split('T')[0];
             goalData.maxTime = goalData.maxTime.split('T')[0];
             console.log("modified goal data--->>>>", goalData)

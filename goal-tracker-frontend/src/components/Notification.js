@@ -19,7 +19,6 @@ function NotificationComponent({ goals }) {
                 const currentTime = moment().tz("Asia/Kolkata");
                 const targetTime = moment.tz(time, "HH:mm", "Asia/Kolkata");
 
-                // If target time is earlier than current time, set it for the next day
                 if (targetTime.isBefore(currentTime)) {
                     targetTime.add(1, 'day');
                 }
@@ -48,19 +47,19 @@ function NotificationComponent({ goals }) {
     }, [goals]);
 
     const showNotification = (value) => {
-        // Show in-app toast notification
+
         toast.info(value, {
             position: "top-right",
             autoClose: 5000,
         });
 
-        // Show desktop notification
+
         if (!("Notification" in window)) {
             console.error("This browser does not support desktop notification");
         } else if (Notification.permission === "granted") {
             new Notification('Reminder', {
                 body: value,
-                icon: 'path/to/icon.png' // Optional: Add an icon if desired
+                icon: 'path/to/icon.png' // This is optional
             });
         } else if (Notification.permission !== "denied") {
             Notification.requestPermission().then(permission => {

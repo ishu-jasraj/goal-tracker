@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
-import '../styles/Task.css'; // Ensure this path is correct
+import React, { useState, useEffect } from 'react';
+import '../styles/Task.css';
 
-export default function Task({ task, handleInputChange, handleTaskInputChange }) {
-    const [isReminderSet, setIsReminderSet] = useState(false);
-    console.log("isReminderSet", isReminderSet)
+export default function Task({ key, task, handleInputChange, handleTaskInputChange }) {
+    // const [isReminderSet, setIsReminderSet] = useState(false);
+    const [reminders, setReminders] = useState({});
     // task.reminder = task.reminder == 'true' ? true : false;
 
+    // const handleCheckboxChange = (id, e) => {
+    //     setIsReminderSet(!isReminderSet);
+    //     e.target.value = !isReminderSet;
+    //     handleTaskInputChange(id, e);
+    // };
+
+    useEffect(() => {
+        setReminders(prevState => ({
+            ...prevState,
+            [task.id]: task.reminder || false
+        }));
+    }, [task.reminder, task.id]);
+
+
     const handleCheckboxChange = (id, e) => {
-        setIsReminderSet(!isReminderSet);
-        e.target.value = !isReminderSet;
+        setReminders(prevState => ({
+            ...prevState,
+            [id]: !prevState[id]
+        }));
+        e.target.value = !reminders[id];
         handleTaskInputChange(id, e);
     };
 
@@ -78,7 +95,7 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                         id={`reminder-${task.id}`}
                         name="reminder"
                         value={task.reminder || ''}
-                        checked={task.reminder || isReminderSet}
+                        checked={!reminders[task.id]}
                         onChange={(e) => handleCheckboxChange(task.id, e)}
                     />
                     <label htmlFor={`reminder-${task.id}`}>Set Reminder</label>
@@ -91,17 +108,18 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                         name="time"
                         value={task.time || ''}
                         onChange={(e) => handleTaskInputChange(task.id, e)}
-                        disabled={!isReminderSet}
+                        disabled={reminders[task.id]}
                     />
                 </div>
             </div>
-            {(isReminderSet || task.reminder) && (
+            {(!reminders[task.id]) && (
                 <div className="suggested-times">
                     <label>Suggested Times:</label>
                     <div className="suggested-time-tabs">
                         {suggestedTimes.map((time, index) => (
                             <div
                                 key={index}
+                                id={`suggested-time-${task.id}`}
                                 className="suggested-time-tab"
                                 onClick={() => handleSuggestedTimeClick(task.id, formatTimeForInput(time))}
                             >

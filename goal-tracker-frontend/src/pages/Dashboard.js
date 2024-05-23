@@ -16,11 +16,9 @@ const initialFormData = {
 };
 
 function formatTime(time) {
-    const date = new Date(time);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+    let date = new Date(time);
+    date = date.toISOString().split('T')[0];
+    return date;
 }
 
 
@@ -217,24 +215,6 @@ const Dashboard = () => {
                 </div>
             </header>
             {/* create goals card */}
-            {/* <div className="goals-container">
-                {goals.map((currentGoal, index) => (
-                    <div className="goal-card" key={index}>
-                        <h3>{currentGoal.title}</h3>
-                        <ol>
-                            {currentGoal.tasks && currentGoal.tasks.map((task, idx) => (
-                                <li key={idx}>{task.value}</li>
-                            ))}
-                        </ol>
-                        <p>Min Time: {formatTime(currentGoal.minTime)}</p>
-                        <p>Max Time: {formatTime(currentGoal.maxTime)}</p>
-                        <div className="goal-actions">
-                            <button onClick={() => handleModify(index)}>Modify</button>
-                            <button onClick={() => handleDelete(index)}>Delete</button>
-                        </div>
-                    </div>
-                ))}
-            </div> */}
             <div className="goals-container">
                 {goals.map((currentGoal, index) => (
                     <div className="goal-card" key={index}>
