@@ -3,6 +3,8 @@ import '../styles/Task.css'; // Ensure this path is correct
 
 export default function Task({ task, handleInputChange, handleTaskInputChange }) {
     const [isReminderSet, setIsReminderSet] = useState(false);
+    console.log("isReminderSet", isReminderSet)
+    // task.reminder = task.reminder == 'true' ? true : false;
 
     const handleCheckboxChange = (id, e) => {
         setIsReminderSet(!isReminderSet);
@@ -76,7 +78,7 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                         id={`reminder-${task.id}`}
                         name="reminder"
                         value={task.reminder || ''}
-                        checked={isReminderSet}
+                        checked={task.reminder || isReminderSet}
                         onChange={(e) => handleCheckboxChange(task.id, e)}
                     />
                     <label htmlFor={`reminder-${task.id}`}>Set Reminder</label>
@@ -93,7 +95,7 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                     />
                 </div>
             </div>
-            {isReminderSet && (
+            {(isReminderSet || task.reminder) && (
                 <div className="suggested-times">
                     <label>Suggested Times:</label>
                     <div className="suggested-time-tabs">

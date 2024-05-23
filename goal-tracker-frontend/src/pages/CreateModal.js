@@ -3,7 +3,7 @@ import '../styles/CreateModal.css';
 import { toast } from 'react-toastify';
 import Task from '../components/Task'
 
-const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, handleFieldChange, handleInputChange, handleTaskInputChange, isModify, token }) => {
+const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, handleFieldChange, handleInputChange, handleTaskInputChange, isModify, token, setModify }) => {
     console.log("formData-->>>", formData)
     console.log("isModify-->>>", isModify)
 
@@ -34,6 +34,7 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
             let goalData = {};
             let response;
             if (isModify) {
+                setModify(false)
                 console.log("modifyyyyyyy finalFormData-->>>>", finalFormData)
                 console.log("modifyyyyyyy token-->>>>", token)
                 response = await fetch('http://localhost:5000/api/goals/update', {

@@ -15,22 +15,11 @@ const initialFormData = {
     maxTime: '',
 };
 
-// const fetchAllGoals = async (token) => {
-//     const response = await fetch('http://localhost:5000/api/goals/me', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Access-Control-Allow-Origin': true
-//         },
-//         body: JSON.stringify(token),
-//     });
-//     console.log("response data after fetching goals for user->", await response.json())
-//     const fetchedGoals = await response.json();
-// }
-
 function formatTime(time) {
-    return new Date(time.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
 }
+
 
 const Dashboard = () => {
     const [goals, setGoals] = useState([]);
@@ -88,6 +77,7 @@ const Dashboard = () => {
 
     function closeModal() {
         setIsModalOpen(false);
+        setModify(false);
     }
 
     const handleModify = (index) => {
@@ -150,20 +140,6 @@ const Dashboard = () => {
         setFormData({ ...formData, tasks: newTasks });
     };
 
-    // const handleInputChange = (id, event) => {
-    //     const { name, value } = event.target;
-    //     const newTasks = formData.tasks.map(task =>
-    //         task.id === id ? { ...task, [name]: value } : task
-    //     );
-    //     console.log("new task ===", newTasks);
-    //     setFormData({ ...formData, tasks: newTasks });
-    // };
-
-
-    // const handleFieldChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({ ...formData, [name]: value });
-    // };
     const handleTaskInputChange = (id, event) => {
         console.log("event.target---", event.target)
         // console.log("event.target.value---", event.target.value)
@@ -247,10 +223,8 @@ const Dashboard = () => {
                                 <li key={idx}>{task.value}</li>
                             ))}
                         </ol>
-                        {/* <p>Min Time: {formatTime(currentGoal.minTime)}</p>
-                        <p>Max Time: {formatTime(currentGoal.maxTime)}</p> */}
-                        <p>Min Time: {new Date(currentGoal.minTime).toLocaleDateString()}</p>
-                        <p>Max Time: {new Date(currentGoal.maxTime).toLocaleDateString()}</p>
+                        <p>Min Time: {formatTime(currentGoal.minTime)}</p>
+                        <p>Max Time: {formatTime(currentGoal.maxTime)}</p>
                         <div className="goal-actions">
                             <button onClick={() => handleModify(index)}>Modify</button>
                             <button onClick={() => handleDelete(index)}>Delete</button>
@@ -274,6 +248,7 @@ const Dashboard = () => {
                     handleTaskInputChange={handleTaskInputChange}
                     handleAddInput={handleAddInput}
                     token={token}
+                    setModify={setModify}
                     title='Create Goal' />
             }
         </div>
