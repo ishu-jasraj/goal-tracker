@@ -17,7 +17,10 @@ const initialFormData = {
 
 function formatTime(time) {
     const date = new Date(time);
-    return date.toISOString().split('T')[0];
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
 }
 
 
@@ -214,7 +217,7 @@ const Dashboard = () => {
                 </div>
             </header>
             {/* create goals card */}
-            <div className="goals-container">
+            {/* <div className="goals-container">
                 {goals.map((currentGoal, index) => (
                     <div className="goal-card" key={index}>
                         <h3>{currentGoal.title}</h3>
@@ -231,7 +234,30 @@ const Dashboard = () => {
                         </div>
                     </div>
                 ))}
+            </div> */}
+            <div className="goals-container">
+                {goals.map((currentGoal, index) => (
+                    <div className="goal-card" key={index}>
+                        <h2 className="goal-title">{currentGoal.title}</h2>
+                        <h4>Tasks:</h4>
+                        <ol className="task-list">
+                            {currentGoal.tasks && currentGoal.tasks.map((task, idx) => (
+                                <li key={idx} className="task-item">{task.value}</li>
+                            ))}
+                        </ol>
+                        <div className="time-details">
+                            <p><strong>Min Time:</strong> {formatTime(currentGoal.minTime)}</p>
+                            <p><strong>Max Time:</strong> {formatTime(currentGoal.maxTime)}</p>
+                        </div>
+                        <div className="goal-actions">
+                            <button className="modify-btn" onClick={() => handleModify(index)}>Modify</button>
+                            <button className="delete-btn" onClick={() => handleDelete(index)}>Delete</button>
+                        </div>
+                    </div>
+                ))}
             </div>
+
+
             <Notification goals={goals} />
             {
                 isDelete >= 0 && <Delete onDeleteGoal={onDeleteGoal} closeDeleteModal={closeDeleteModal} />
