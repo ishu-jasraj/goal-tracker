@@ -100,6 +100,7 @@ const Dashboard = () => {
 
     const handleDelete = (index) => {
         setIsDelete(index);
+        setModify(false);
         console.log("is delete index---", isDelete)
 
     };

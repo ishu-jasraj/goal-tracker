@@ -9,7 +9,26 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
         e.target.value = !isReminderSet;
         handleTaskInputChange(id, e);
     };
-    console.log("task incoming ===", task);
+
+    const handleSuggestedTimeClick = (id, time) => {
+        const event = { target: { name: 'time', value: time } };
+        handleTaskInputChange(id, event);
+    };
+
+    const suggestedTimes = ['08:00 AM', '01:52 PM', '04:00 PM'];
+
+    const formatTimeForInput = (time) => {
+        const [hour, period] = time.split(' ');
+        let [hours, minutes] = hour.split(':').map(Number);
+        if (period === 'PM' && hours !== 12) {
+            hours += 12;
+        }
+        if (period === 'AM' && hours === 12) {
+            hours = 0;
+        }
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    };
+
     return (
         <div className="task-container">
             <div className="task-input">
@@ -74,8 +93,22 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                     />
                 </div>
             </div>
+            {isReminderSet && (
+                <div className="suggested-times">
+                    <label>Suggested Times:</label>
+                    <div className="suggested-time-tabs">
+                        {suggestedTimes.map((time, index) => (
+                            <div
+                                key={index}
+                                className="suggested-time-tab"
+                                onClick={() => handleSuggestedTimeClick(task.id, formatTimeForInput(time))}
+                            >
+                                {time}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
-
-

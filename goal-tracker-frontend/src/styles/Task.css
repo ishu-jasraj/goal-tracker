@@ -236,3 +236,58 @@
     border-radius: 4px;
     margin-left: 10px;
 }
+
+/* .suggested-times {
+    margin-top: 10px;
+}
+
+.suggested-time-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.suggested-time-tab {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.suggested-time-tab:hover {
+    background-color: #ddd;
+} */
+
+.suggested-times {
+    margin-top: 10px;
+}
+
+.suggested-times label {
+    margin-top: 10px;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.suggested-time-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.suggested-time-tab {
+    padding: 4px 8px;
+    /* Match button padding */
+    border: 1px solid #007bff;
+    /* Match button border color */
+    border-radius: 4px;
+    /* Match button border radius */
+    cursor: pointer;
+    background-color: #007bff;
+    /* Match button background color */
+    color: #fff;
+    /* Match button text color */
+    font-weight: bold;
+    /* Make text bold */
+    text-align: center;
+}
