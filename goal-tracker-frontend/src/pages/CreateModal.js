@@ -7,6 +7,10 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
     console.log("formData-->>>", formData)
     console.log("isModify-->>>", isModify)
 
+
+    const formattedMinTime = formData.minTime ? new Date(formData.minTime).toISOString().split('T')[0] : '';
+    const formattedMaxTime = formData.maxTime ? new Date(formData.maxTime).toISOString().split('T')[0] : '';
+
     //saving goals
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -115,7 +119,7 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                                 type="date"
                                 id="minTime"
                                 name="minTime"
-                                value={formData.minTime}
+                                value={formattedMinTime}
                                 onChange={handleFieldChange}
                                 required
                             />
@@ -126,7 +130,7 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                                 type="date"
                                 id="maxTime"
                                 name="maxTime"
-                                value={formData.maxTime || ''}
+                                value={formattedMaxTime}
                                 onChange={handleFieldChange}
                                 required
                             />
