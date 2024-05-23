@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import moment from 'moment-timezone';
+import 'react-toastify/dist/ReactToastify.css';
 
 function NotificationComponent({ goals }) {
     useEffect(() => {
@@ -7,11 +9,21 @@ function NotificationComponent({ goals }) {
             goals.forEach(goal => {
                 goal.tasks.forEach(task => {
                     const { value, time } = task;
-                    const currentTime = new Date();
-                    // const targetTime = new Date(time);
-                    const targetTime = new Date();
+                    console.log('Task value and time:', value, time);
 
-                    const timeDifference = targetTime - currentTime;
+                    const currentTime = moment().tz("Asia/Kolkata");
+                    const targetTime = moment.tz(time, "HH:mm", "Asia/Kolkata");
+
+                    // If target time is earlier than current time, set it for the next day
+                    if (targetTime.isBefore(currentTime)) {
+                        targetTime.add(1, 'day');
+                    }
+
+                    const timeDifference = targetTime.diff(currentTime);
+
+                    console.log('Current time:', currentTime.format());
+                    console.log('Target time:', targetTime.format());
+                    console.log('Time difference (ms):', timeDifference);
 
                     if (timeDifference >= 0) {
                         setTimeout(() => {

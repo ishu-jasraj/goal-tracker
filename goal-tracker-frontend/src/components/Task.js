@@ -28,7 +28,7 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                     <select id={`quantity-${task.id}`} name="quantity"
                         value={task.quantity || ''}
                         onChange={(e) => handleTaskInputChange(task.id, e)}>
-                        <option disabled selected>Select Qty</option>
+                        <option disabled defaultValue>Select Qty</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -44,7 +44,7 @@ export default function Task({ task, handleInputChange, handleTaskInputChange })
                         name="frequency"
                         value={task.frequency || ''}
                         onChange={(e) => handleTaskInputChange(task.id, e)}>
-                        <option disabled selected>Select Frequency</option>
+                        <option disabled defaultValue>Select Frequency</option>
                         <option value="day">day</option>
                         <option value="week">week</option>
                     </select>
