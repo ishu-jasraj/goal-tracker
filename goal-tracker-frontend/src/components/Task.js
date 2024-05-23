@@ -11,7 +11,7 @@ export default function Task({ uKey, task, handleInputChange, handleTaskInputCha
     //     e.target.value = !isReminderSet;
     //     handleTaskInputChange(id, e);
     // };
-    console.log("mai uKey hun task se bol raha hun : ", uKey);
+
     useEffect(() => {
         setReminders(prevState => ({
             ...prevState,
