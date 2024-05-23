@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Task.css';
 
-export default function Task({ key, task, handleInputChange, handleTaskInputChange }) {
+export default function Task({ uKey, task, handleInputChange, handleTaskInputChange }) {
     // const [isReminderSet, setIsReminderSet] = useState(false);
     const [reminders, setReminders] = useState({});
     // task.reminder = task.reminder == 'true' ? true : false;
@@ -11,13 +11,13 @@ export default function Task({ key, task, handleInputChange, handleTaskInputChan
     //     e.target.value = !isReminderSet;
     //     handleTaskInputChange(id, e);
     // };
-
+    console.log("mai uKey hun task se bol raha hun : ", uKey);
     useEffect(() => {
         setReminders(prevState => ({
             ...prevState,
-            [task.id]: task.reminder || false
+            [uKey]: task.reminder || false
         }));
-    }, [task.reminder, task.id]);
+    }, [task.reminder, uKey]);
 
 
     const handleCheckboxChange = (id, e) => {
@@ -31,7 +31,7 @@ export default function Task({ key, task, handleInputChange, handleTaskInputChan
 
     const handleSuggestedTimeClick = (id, time) => {
         const event = { target: { name: 'time', value: time } };
-        handleTaskInputChange(id, event);
+        handleInputChange(id, event);
     };
 
     const suggestedTimes = ['08:00 AM', '01:52 PM', '04:00 PM'];
@@ -54,18 +54,18 @@ export default function Task({ key, task, handleInputChange, handleTaskInputChan
                 <label htmlFor='Task'>Task:</label>
                 <input
                     type="text"
-                    id={task.value}
-                    name={task.value}
-                    value={task.value}
-                    onChange={(e) => handleInputChange(task.id, e)}
+                    id={`Task-${uKey}`}
+                    name="value"
+                    value={task.value || ''}
+                    onChange={(e) => handleInputChange(uKey, e)}
                 />
             </div>
             <div className="task-details">
                 <div className="task-select">
-                    <label htmlFor={`quantity-${task.id}`}>Quantity:</label>
-                    <select id={`quantity-${task.id}`} name="quantity"
+                    <label htmlFor={`quantity-${uKey}`}>Quantity:</label>
+                    <select id={`quantity-${uKey}`} name="quantity"
                         value={task.quantity || ''}
-                        onChange={(e) => handleTaskInputChange(task.id, e)}>
+                        onChange={(e) => handleInputChange(uKey, e)}>
                         <option disabled defaultValue>Select Qty</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -77,11 +77,11 @@ export default function Task({ key, task, handleInputChange, handleTaskInputChan
                     </select>
                 </div>
                 <div className="task-frequency">
-                    <label htmlFor={`frequency-${task.id}`}>Frequency:</label>
-                    <select id={`frequency-${task.id}`}
+                    <label htmlFor={`frequency-${uKey}`}>Frequency:</label>
+                    <select id={`frequency-${uKey}`}
                         name="frequency"
                         value={task.frequency || ''}
-                        onChange={(e) => handleTaskInputChange(task.id, e)}>
+                        onChange={(e) => handleInputChange(uKey, e)}>
                         <option disabled defaultValue>Select Frequency</option>
                         <option value="day">day</option>
                         <option value="week">week</option>
@@ -92,36 +92,36 @@ export default function Task({ key, task, handleInputChange, handleTaskInputChan
                 <div className="task-reminder">
                     <input
                         type="checkbox"
-                        id={`reminder-${task.id}`}
+                        id={`reminder-${uKey}`}
                         name="reminder"
                         value={task.reminder || ''}
-                        checked={!reminders[task.id]}
-                        onChange={(e) => handleCheckboxChange(task.id, e)}
+                        checked={!reminders[uKey]}
+                        onChange={(e) => handleCheckboxChange(uKey, e)}
                     />
-                    <label htmlFor={`reminder-${task.id}`}>Set Reminder</label>
+                    <label htmlFor={`reminder-${uKey}`}>Set Reminder</label>
                 </div>
                 <div className="task-reminder">
-                    <label htmlFor={`time-${task.id}`} className="time-label">Time:</label>
+                    <label htmlFor={`time-${uKey}`} className="time-label">Time:</label>
                     <input
                         type="time"
-                        id={`time-${task.id}`}
+                        id={`time-${uKey}`}
                         name="time"
                         value={task.time || ''}
-                        onChange={(e) => handleTaskInputChange(task.id, e)}
-                        disabled={reminders[task.id]}
+                        onChange={(e) => handleInputChange(uKey, e)}
+                        disabled={reminders[uKey]}
                     />
                 </div>
             </div>
-            {(!reminders[task.id]) && (
+            {(!reminders[uKey]) && (
                 <div className="suggested-times">
                     <label>Suggested Times:</label>
                     <div className="suggested-time-tabs">
                         {suggestedTimes.map((time, index) => (
                             <div
                                 key={index}
-                                id={`suggested-time-${task.id}`}
+                                id={`suggested-time-${index}`}
                                 className="suggested-time-tab"
-                                onClick={() => handleSuggestedTimeClick(task.id, formatTimeForInput(time))}
+                                onClick={() => handleSuggestedTimeClick(uKey, formatTimeForInput(time))}
                             >
                                 {time}
                             </div>

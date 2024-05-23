@@ -100,9 +100,9 @@ const CreateModal = ({ closeModal, title, createGoal, formData, handleAddInput, 
                                 required
                             />
                         </div>
-                        {formData.tasks && formData.tasks.map(task => (
-                            <div className="form-group" key={task.id}>
-                                <Task task={task} handleInputChange={handleInputChange} handleTaskInputChange={handleTaskInputChange} />
+                        {formData.tasks && formData.tasks.map((task, index) => (
+                            <div className="form-group" key={index}>
+                                <Task uKey={index} task={task} handleInputChange={handleInputChange} handleTaskInputChange={handleTaskInputChange} />
                             </div>
                         ))}
                         <button

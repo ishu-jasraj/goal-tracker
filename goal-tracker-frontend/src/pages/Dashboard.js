@@ -135,9 +135,16 @@ const Dashboard = () => {
 
     const handleInputChange = (id, event) => {
         const { name, value } = event.target;
-        const newTasks = formData.tasks.map(task =>
-            task.id === id ? { ...task, value: event.target.value } : task
-        );
+        const newTasks = formData.tasks.map((task, index) => {
+            if (index === id) {
+                const updatedTask = {
+                    ...task,
+                    [name]: value,
+                }
+                return updatedTask;
+            }
+            return task;
+        });
         setFormData({ ...formData, tasks: newTasks });
     };
 
@@ -149,8 +156,8 @@ const Dashboard = () => {
         console.log("value----", value)
         console.log("type----", type)
         console.log("checked----", checked)
-        const newTasks = formData.tasks.map(task => {
-            if (task.id === id) {
+        const newTasks = formData.tasks.map((task, index) => {
+            if (index === id) {
                 const obj = {
                     ...task,
                     [name]: value,
@@ -176,7 +183,9 @@ const Dashboard = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const closeDeleteModal = () => { }
+    const closeDeleteModal = () => {
+        setIsDelete(-1);
+    }
 
 
 
